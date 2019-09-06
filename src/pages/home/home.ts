@@ -11,7 +11,11 @@ import { NavController, IonicPage } from 'ionic-angular';
 export class HomePage {
 
   constructor(public navCtrl: NavController) {
+  }
 
+  public login(){
+    this.navCtrl.setRoot('CategoriasPage');
+        //push empilha as paginas - this.navCtrl.push('CategoriasPage');
   }
 
 }
