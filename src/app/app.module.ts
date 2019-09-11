@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { HttpClientModule } from '@angular/common/http';
+import { CategoriaService } from '../services/domain/categoria.service';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -22,7 +25,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CategoriaService
   ]
 })
 export class AppModule {
@@ -32,7 +36,7 @@ export class AppModule {
 
 //Diretivas: Controla o Two Way Data Binding da paginas . Exemplo: ng-if , ng-view , ng-app	e etc ... 
 
-//Provedores: São funções . "Você deve usar a receita do Provider apenas quando deseja expor uma API para configurações que precisam ser feitas antes da inicialização da aplicação. Comumente isto é interessante apenas para serviços reutilizáveis cujo comportamento precise variar ligeiramente entre aplicações." (tradução livre)
+//Provedores: Prover serviços são funções . "Você deve usar a receita do Provider apenas quando deseja expor uma API para configurações que precisam ser feitas antes da inicialização da aplicação. Comumente isto é interessante apenas para serviços reutilizáveis cujo comportamento precise variar ligeiramente entre aplicações." (tradução livre)
 //*Provider é uma das receitas angular;
 //*Provider é a receita básica do angular, mãe de todas as outras;
 //*Um provider implementa um método $get que retorna uma Factory;
