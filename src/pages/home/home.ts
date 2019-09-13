@@ -34,13 +34,12 @@ export class HomePage {
 
     this.auth.authenticate(this.creds)
     .subscribe(response => {
-        console.log(response.headers.get('Authorization'));
-        this.navCtrl.setRoot('CategoriasPage');
+        this.auth.successfulLogin(response.headers.get('Authorization'));
+         this.navCtrl.setRoot('CategoriasPage');
         //push empilha as paginas - this.navCtrl.push('CategoriasPage');
 
     },
       error => {})
-   
     
    
   }
