@@ -8,6 +8,8 @@ export class StorageService{
     getLocalUser(): LocalUser{
         let usr = localStorage.getItem(STORAGE_KEYS.localUser);
 
+        //localStorage : localStorage nos permite armazenar dados de forma simples e sem expiração, ou seja, ficam lá enquanto não apagarmos por código ou pelo próprio navegador.
+
         if(usr == null){
             return null;
         }else{
