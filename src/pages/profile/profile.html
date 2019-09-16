@@ -9,5 +9,10 @@
 </ion-header>
 
 <ion-content padding>
-{{ email }}
+  <ion-avatar>
+    <img class="circle" [src]="cliente?.imageUrl || 'assets/imgs/avatar-blank.png'">
+    <!-- ? que dizer se a variavel não valer nada não vai dar erro na pagina de cliente -->
+  </ion-avatar>
+  <h2 text-center>{{cliente?.nome}}</h2>
+  <p text-center>{{cliente?.email}}</p>
 </ion-content>
