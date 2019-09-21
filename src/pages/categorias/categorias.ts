@@ -45,8 +45,8 @@ export class CategoriasPage {
         
   }
 
-  showProdutos() {
-    this.navCtrl.push('ProdutosPage');    
+  showProdutos(categoria_id : string) {
+    this.navCtrl.push('ProdutosPage', {categoria_id: categoria_id});    //passando atributos de uma pagina para outra (ategoria_id- valor : categoria_id - parametro)
   }
 
 }
