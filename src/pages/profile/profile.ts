@@ -35,7 +35,8 @@ export class ProfilePage {
       this.clienteService.findByEmail(localUser.email)
       
       .subscribe(response =>{
-        this.cliente = response;
+        //as ClienteDTO -cache para ClienteDTO
+        this.cliente = response as ClienteDTO;
         console.log("oi estou no response");
         this.getImageIfExists();
       },
