@@ -12,7 +12,9 @@ import { LoadingController } from 'ionic-angular/components/loading/loading-cont
 })
 export class ProdutosPage {
 
-  items : ProdutoDTO[];
+  items : ProdutoDTO[] = [];
+  // ProdutoDTO[] = [] iniciando uma lista vazio para concatenar a lista (lista vai ser as paginas).
+  page : number = 0;
 
   constructor(
     public navCtrl: NavController,
@@ -29,11 +31,15 @@ export class ProdutosPage {
   
         let categoria_id = this.navParams.get('categoria_id');
         let loader = this.presentLoading();
-        this.produtoService.findByCategoria(categoria_id)
+        this.produtoService.findByCategoria(categoria_id, this.page, 10)
           .subscribe(response => {
-            this.items = response['content'];// response['content'] --content tem o conteudo ( pois o endpoit é pagibado).
+            let start = this.items.length;//o tamanho que a lista tinha antes
+            this.items = this.items.concat(response['content']);// response['content'] --content tem o conteudo ( pois o endpoit é pagibado). concat estou concatenado a respota com a que já tinha antes.
+            let end = this.items.length - 1; // o novo tamanho da lista -1
             loader.dismiss();
-            this.loadImageUrls();
+            console.log(this.page);
+            console.log(this.items);
+            this.loadImageUrls(start, end);
          
       },
       error => {
@@ -41,9 +47,9 @@ export class ProdutosPage {
       });
     }
 
-    loadImageUrls() {
+    loadImageUrls(start: number, end: number) {
       //metod que pecorre a lista de items e seta a imagem nele.
-      for (var i=0; i<this.items.length; i++) {
+      for (var i=start; i<=end; i++) {
         let item = this.items[i];
         this.produtoService.getSmallImageFromBucket(item.id)
           .subscribe(response => {
@@ -67,9 +73,19 @@ export class ProdutosPage {
 
     doRefresh(refresher) {
       //depois de 1 segundo ele executa a função.
+      this.page = 0;
+      this.items = [];
       this.loadData();
       setTimeout(() => {
         refresher.complete();
+      }, 1000);
+    }
+
+    doInfinite(infiniteScroll) {
+      this.page++;
+      this.loadData();
+      setTimeout(() => {
+        infiniteScroll.complete();
       }, 1000);
     }
 }
