@@ -4,13 +4,8 @@ import { StorageService } from '../../services/storage.service';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { API_CONFIG } from '../../config/api.config';
+import { CameraOptions, Camera } from '@ionic-native/camera';
 
-/**
- * Generated class for the ProfilePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -20,8 +15,15 @@ import { API_CONFIG } from '../../config/api.config';
 export class ProfilePage {
 
   cliente : ClienteDTO;
+  picture: string;
+  cameraOn: boolean = false;//ativar e desativar botão para tirar foto
 
-  constructor(public navCtrl: NavController, public navParams: NavParams , public storage: StorageService , public clienteService :ClienteService) {
+  constructor(
+    public navCtrl: NavController,
+     public navParams: NavParams , 
+     public storage: StorageService , 
+     public clienteService :ClienteService,
+     public camera: Camera) {
   }
 
   
@@ -62,5 +64,25 @@ export class ProfilePage {
     },
     error => {});
   }
+
+  getCameraPicture() {
+
+    this.cameraOn = true;
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.PNG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+     this.picture = 'data:image/png;base64,' + imageData;
+     this.cameraOn = false;
+    }, (err) => {
+    });
+  }
+
+
 
 }
