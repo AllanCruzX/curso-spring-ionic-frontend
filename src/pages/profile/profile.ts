@@ -26,9 +26,11 @@ export class ProfilePage {
      public camera: Camera) {
   }
 
-  
-
   ionViewDidLoad() {
+    this.loadData();
+  }
+
+  loadData()  {
     let localUser = this.storage.getLocalUser();
   
     if(localUser && localUser.email){
@@ -81,6 +83,20 @@ export class ProfilePage {
      this.cameraOn = false;
     }, (err) => {
     });
+  }
+
+  sendPicture() {
+    this.clienteService.uploadPicture(this.picture)
+      .subscribe(response => {
+        this.picture = null;//já carreguei e depois colo null
+        this.loadData();//força o recarregamento dos dados
+      },
+      error => {
+      });
+  }
+
+  cancel() {
+    this.picture = null;//descarta imagem
   }
 
 
