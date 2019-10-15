@@ -5,6 +5,7 @@ import { ClienteService } from '../../services/domain/cliente.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { API_CONFIG } from '../../config/api.config';
 import { CameraOptions, Camera } from '@ionic-native/camera';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @IonicPage()
@@ -16,6 +17,7 @@ export class ProfilePage {
 
   cliente : ClienteDTO;
   picture: string;
+  profileImage;
   cameraOn: boolean = false;//ativar e desativar botão para tirar foto
 
   constructor(
@@ -23,7 +25,11 @@ export class ProfilePage {
      public navParams: NavParams , 
      public storage: StorageService , 
      public clienteService :ClienteService,
-     public camera: Camera) {
+     public camera: Camera,
+     public sanitizer: DomSanitizer) {
+       //DomSanitizer autoriza setar a imgem na variavel profileImage.
+
+       this.profileImage = 'assets/imgs/avatar-blank.png';
   }
 
   ionViewDidLoad() {
@@ -57,15 +63,29 @@ export class ProfilePage {
   }
 
   getImageIfExists() {
-    console.log(this.cliente.id)
-   
+       
     this.clienteService.getImageFromBucket(this.cliente.id)
     .subscribe(response => {
       this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`;
-      console.log( this.cliente.imageUrl)
+      this.blobToDataURL(response).then(dataUrl => {
+        let str : string = dataUrl as string;
+        this.profileImage = this.sanitizer.bypassSecurityTrustUrl(str);
+      });
     },
-    error => {});
+    error => {
+      this.profileImage = 'assets/imgs/avatar-blank.png';
+    });
   }
+//CONVERTE GLOB PARA BASE 64
+  blobToDataURL(blob) {
+    return new Promise((fulfill, reject) => {
+        let reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = (e) => fulfill(reader.result);
+        reader.readAsDataURL(blob);
+    })
+  }
+  
 
   getCameraPicture() {
 
@@ -90,7 +110,7 @@ export class ProfilePage {
     this.clienteService.uploadPicture(this.picture)
       .subscribe(response => {
         this.picture = null;//já carreguei e depois colo null
-        this.loadData();//força o recarregamento dos dados
+        this.getImageIfExists();
       },
       error => {
       });

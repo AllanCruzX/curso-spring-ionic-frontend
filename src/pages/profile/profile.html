@@ -10,7 +10,8 @@
 
 <ion-content padding>
   <ion-avatar>
-    <img class="circle" [src]="cliente?.imageUrl || 'assets/imgs/avatar-blank.png'">
+    <img class="circle" [src]="profileImage">
+
     <!-- ? que dizer se a variavel não valer nada não vai dar erro na pagina de cliente -->
   </ion-avatar>
   <h2 text-center>{{cliente?.nome}}</h2>
